@@ -4,6 +4,7 @@
   "description": "A web 3 tookit for the browser",
   "license": "MIT",
   "devDependencies": {
+    "@parcel/transformer-image": "2.0.0-rc.0",
     "autoprefixer": "^10.4.12",
     "parcel": "^2.0.0-rc.0",
     "postcss-import": "^15.0.0"
@@ -15,7 +16,7 @@
   "scripts": {
     "prebuild": "rm -rf dist .cache .parcel-cache",
     "build:tailwind": "tailwindcss build src/style.css -c ./tailwind.config.js -o dist/style.css",
-    "watch": "yarn build:tailwind && parcel watch --no-hmr src/{background.js,popup.html}",
+    "dev": "yarn build:tailwind && parcel watch --no-hmr src/{background.js,popup.html}",
     "build": "yarn build:tailwind && copy 'src/manifest.json' 'dist/' && parcel build src/{background.js,popup.html}"
   }
 }
