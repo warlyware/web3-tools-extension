@@ -1,5 +1,5 @@
 {
-  "name": "web3-tools",
+  "name": "web3-tools-extension",
   "version": "1.0.0",
   "description": "A web 3 tookit for the browser",
   "manifest_version": 3,
