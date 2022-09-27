@@ -10,17 +10,17 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "/images/logo.png",
-      "32": "/images/logo.png",
-      "48": "/images/logo.png",
-      "128": "/images/logo.png"
+      "16": "./images/logo.png",
+      "32": "./images/logo.png",
+      "48": "./images/logo.png",
+      "128": "./images/logo.png"
     }
   },
   "icons": {
-    "16": "/images/logo.png",
-    "32": "/images/logo.png",
-    "48": "/images/logo.png",
-    "128": "/images/logo.png"
+    "16": "./images/logo.png",
+    "32": "./images/logo.png",
+    "48": "./images/logo.png",
+    "128": "./images/logo.png"
   },
   "permissions": [
     "webRequest",
@@ -28,7 +28,10 @@
   ],
   "host_permissions": [
     "*://*.sol/*",
-    "https://duckduckgo.com/",
+    "*://naming.warly.co/",
+    "*://search.brave.com/",
+    "*://duckduckgo.com/",
+    "*://duckduckgo.com/",
     "*://www.google.com/",
     "*://www.google.ad/",
     "*://www.google.ae/",

@@ -4,7 +4,7 @@ import * as CryptoJS from "./libraries/crypto-js.min.js";
 // Listen for .sol requests
 chrome.webRequest.onBeforeRequest.addListener(
   async (details) => {
-    await redirect(details.url);
+    await redirectSolUrl(details.url);
   },
   {
     urls: ["*://*.sol/*"],
@@ -14,9 +14,10 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 chrome.webRequest.onBeforeRequest.addListener(
   async (details) => {
-    debugger;
+    console.log("onBeforeRequest", details);
     const solanaUrl = new URL(details.url).searchParams.get("q");
-    await redirect(solanaUrl);
+    await redirectSolUrl(solanaUrl);
+    debugger;
   },
   {
     urls: [
@@ -400,8 +401,10 @@ chrome.webRequest.onBeforeRequest.addListener(
       "*://www.google.co.zm/search?q=*.sol%2F*&*",
       "*://www.google.co.zw/search?q=*.sol%2F*&*",
       "*://www.google.cat/search?q=*.sol%2F*&*",
-      "https://duckduckgo.com/?q=*.sol",
-      "https://duckduckgo.com/?q=*.sol%2F*",
+      "*://duckduckgo.com/?q=*.sol&*",
+      "*://duckduckgo.com/?q=*.sol%2F*",
+      "*://search.brave.com/search?q=*.sol&*",
+      "*://search.brave.com/search?q=*.sol%2F*",
     ],
   },
   []
@@ -415,7 +418,7 @@ async function getCurrentTab() {
   return tab;
 }
 
-async function redirect(solanaUrl) {
+async function redirectSolUrl(solanaUrl) {
   const tab = await getCurrentTab();
   if (tab !== undefined && solanaUrl !== undefined) {
     chrome.tabs.update(tab.id, {

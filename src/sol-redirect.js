@@ -2,71 +2,6 @@ import * as CryptoJS from "./libraries/crypto-js.min.js";
 import { addHttps } from "./utils";
 
 /**
- * Redirects the solana url to the domain/ip/ipfs hash it points to.
- *
- * window.location.href has one param `solanaUrl`, which contains the hostname and path
- *  of the solana url that is passed in. Not required to contain other elements.
- */
-async function main() {
-  await import("./libraries/solana-web3.min.js");
-  await import("./libraries/crypto-js.min.js");
-  const web3 = window.solanaWeb3;
-  debugger;
-
-  const solanaUrl = addHttps(
-    new URL(window.location.href).searchParams.get("solanaUrl")
-  );
-  console.log("solanaUrl", solanaUrl);
-  const solanaUrlParsed = new URL(solanaUrl);
-  const hostnameArray = solanaUrlParsed.hostname.split(".");
-  const SNSDomain = hostnameArray[hostnameArray.length - 2];
-  const SNSDomainFull =
-    (hostnameArray.length === 3 ? hostnameArray[0] + "." : "") +
-    SNSDomain +
-    ".sol";
-  const SNSPathAndSearch = solanaUrlParsed.pathname + solanaUrlParsed.search;
-  document.getElementById("display").textContent = SNSDomainFull;
-  try {
-    let domainKey = await getDomainKey(web3, SNSDomain);
-    let accountKey = domainKey;
-    if (hostnameArray.length === 3) {
-      // Check if there's a subdomain in the input and set accountKey if so
-      accountKey = await getSubdomainKey(domainKey, hostnameArray[0]);
-    }
-    const data = await getContentFromAccount(web3, accountKey);
-
-    const ipfsPrefix = "ipfs=";
-    const ipAddressRegex =
-      /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-
-    if (data.startsWith(ipfsPrefix)) {
-      const cid = data.slice(ipfsPrefix.length);
-      const url = await buildIPFSUrl(cid, SNSPathAndSearch);
-      createDomainPopup(SNSDomainFull, "ipfs", "cid: " + cid, SNSPathAndSearch);
-      window.location.href = url;
-    } else if (data.match(ipAddressRegex)) {
-      createDomainPopup(SNSDomainFull, data, "", SNSPathAndSearch);
-      const url = "http://" + data + SNSPathAndSearch;
-      window.location.href = url;
-    } else {
-      // Extract pathname from url for display purposes
-      const redirectUrl = new URL(addHttps(data));
-      const hostname = redirectUrl.hostname;
-      const fullPathAndSearch =
-        (redirectUrl.pathname === "/" ? "" : redirectUrl.pathname) +
-        SNSPathAndSearch;
-      createDomainPopup(SNSDomainFull, hostname, "", fullPathAndSearch);
-      const url = data + SNSPathAndSearch;
-      window.location.href = addHttps(url);
-    }
-  } catch (err) {
-    console.log(err);
-    debugger;
-    window.location.href = "./404.html";
-  }
-}
-
-/**
  * Create a popup notifying the user what domain they are on
  * TODO: option to disable
  *
@@ -188,6 +123,63 @@ async function getNameAccountKey(web3, hashed_name, nameClass, nameParent) {
     NAME_PROGRAM_ID
   );
   return nameAccountKey;
+}
+
+/**
+ * Redirects the solana url to the domain/ip/ipfs hash it points to.
+ *
+ * window.location.href has one param `solanaUrl`, which contains the hostname and path
+ *  of the solana url that is passed in. Not required to contain other elements.
+ */
+async function main() {
+  await import("./libraries/solana-web3.min.js");
+  await import("./libraries/crypto-js.min.js");
+  const web3 = window.solanaWeb3;
+  debugger;
+
+  const solanaUrl = addHttps(
+    new URL(window.location.href).searchParams.get("solanaUrl")
+  );
+  console.log("solanaUrl", solanaUrl);
+  const solanaUrlParsed = new URL(solanaUrl);
+  const hostnameArray = solanaUrlParsed.hostname.split(".");
+  const SNSDomain = hostnameArray[hostnameArray.length - 2];
+  const SNSDomainFull =
+    (hostnameArray.length === 3 ? hostnameArray[0] + "." : "") +
+    SNSDomain +
+    ".sol";
+  const SNSPathAndSearch = solanaUrlParsed.pathname + solanaUrlParsed.search;
+  document.getElementById("display").textContent = SNSDomainFull;
+  try {
+    let domainKey = await getDomainKey(web3, SNSDomain);
+    let accountKey = domainKey;
+    if (hostnameArray.length === 3) {
+      // Check if there's a subdomain in the input and set accountKey if so
+      accountKey = await getSubdomainKey(domainKey, hostnameArray[0]);
+    }
+    const data = await getContentFromAccount(web3, accountKey);
+
+    const ipfsPrefix = "ipfs=";
+    const ipAddressRegex =
+      /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+    if (data.startsWith(ipfsPrefix)) {
+      const cid = data.slice(ipfsPrefix.length);
+      const url = await buildIPFSUrl(cid, SNSPathAndSearch);
+      window.location.href = url;
+    } else if (data.match(ipAddressRegex)) {
+      const url = "http://" + data + SNSPathAndSearch;
+      window.location.href = url;
+    } else {
+      // Extract pathname from url for display purposes
+      const url = data + SNSPathAndSearch;
+      window.location.href = addHttps(url);
+    }
+  } catch (err) {
+    console.log(err);
+    debugger;
+    window.location.href = "./404.html";
+  }
 }
 
 main();

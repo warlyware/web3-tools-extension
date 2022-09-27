@@ -17,7 +17,7 @@
   "scripts": {
     "prebuild": "rm -rf dist .cache .parcel-cache",
     "build:tailwind": "tailwindcss build src/style.css -c ./tailwind.config.js -o dist/style.css",
-    "dev": "yarn build:tailwind && parcel watch --no-hmr src/{background.js,popup.html,404.html,background.js,ipfs.js,notification.html,notification.js,popup.html,redirect.html,redirect.js,libraries/crypto-js.min.js,libraries/solana-web3.min.js,utils/index.js}",
-    "build": "yarn build:tailwind && copy 'src/manifest.json' 'dist/' && parcel build src/{background.js,popup.html,404.html,background.js,ipfs.js,notification.html,notification.js,popup.html,redirect.html,redirect.js,libraries/crypto-js.min.js,libraries/solana-web3.min.js,utils/index.js}"
+    "dev": "yarn build:tailwind && cp 'src/manifest.json' 'dist/' && parcel watch --no-hmr src/{background.js,popup.html,404.html,background.js,ipfs.js,notification.html,notification.js,popup.html,redirect.html,sol-redirect.js,libraries/crypto-js.min.js,libraries/solana-web3.min.js,utils/index.js}",
+    "build": "yarn build:tailwind && cp 'src/manifest.json' 'dist/' && parcel build src/{background.js,popup.html,404.html,background.js,ipfs.js,notification.html,notification.js,popup.html,redirect.html,sol-redirect.js,libraries/crypto-js.min.js,libraries/solana-web3.min.js,utils/index.js}"
   }
 }
