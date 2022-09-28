@@ -10,24 +10,29 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "./images/logo.png",
-      "32": "./images/logo.png",
-      "48": "./images/logo.png",
-      "128": "./images/logo.png"
+      "16": "images/logo.png",
+      "32": "images/logo.png",
+      "48": "images/logo.png",
+      "128": "images/logo.png"
     }
   },
   "icons": {
-    "16": "./images/logo.png",
-    "32": "./images/logo.png",
-    "48": "./images/logo.png",
-    "128": "./images/logo.png"
+    "16": "images/logo.png",
+    "32": "images/logo.png",
+    "48": "images/logo.png",
+    "128": "images/logo.png"
   },
   "permissions": [
     "webRequest",
     "storage"
   ],
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; connect-src 'self' https://preview-naming.warly.co/"
+  },
   "host_permissions": [
+    "localhost:3000",
     "*://*.sol/*",
+    "*://*.degen/*",
     "*://*.warly.co/",
     "*://search.brave.com/",
     "*://duckduckgo.com/",

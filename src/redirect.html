@@ -2,15 +2,22 @@
 <html>
   <head>
     <title>WNS</title>
-    <script src="libraries/crypto-js.min.js" type="module"></script>
-    <script src="libraries/solana-web3.min.js" type="module"></script>
+    <link rel="stylesheet" href="style.css" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+      script-src 'self' 'wasm-unsafe-eval';
+      object-src 'self';"
+    />
   </head>
   <body
-    class="bg-slate-800 text-slate-300 text-2xl flex w-screen h-screen items-center justify-center"
+    class="bg-slate-800 text-slate-300 text-2xl flex w-screen h-screen items-center justify-center animate-pulse"
   >
-    <text>redirecting to</text>
+    <text class="text-4xl">Redirecting...</text>
     <text id="display"></text>
   </body>
-  <script src="ipfs.js" type="module"></script>
-  <script src="redirect.js" type="module"></script>
+  <script src="libraries/crypto-js.min.js" type="module"></script>
+  <script src="libraries/solana-web3.min.js" type="module"></script>
+  <script src="ipfs.js" type="module" defer></script>
+  <script src="redirect.js" type="module" defer></script>
 </html>

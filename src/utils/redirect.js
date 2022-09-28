@@ -1,4 +1,3 @@
-import * as CryptoJS from "../libraries/crypto-js.min.js";
 import { addHttps } from "./";
 
 /**
@@ -29,7 +28,6 @@ function getHashedName(name) {
     new Uint8Array(
       hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
     );
-  debugger;
   const hashed_name = fromHexString(CryptoJS.SHA256(input).toString());
   return hashed_name;
 }
@@ -105,19 +103,14 @@ async function getSubdomainKey(parentDomainKey, subdomain) {
   return subdomainAccount;
 }
 
-export const handleSolRedirect = async ({ web3, solanaUrl }) => {
-  const solanaUrlParsed = new URL(solanaUrl);
-  const hostnameArray = solanaUrlParsed.hostname.split(".");
-  const SNSDomain = hostnameArray[hostnameArray.length - 2];
-  const SNSDomainFull =
-    (hostnameArray.length === 3 ? hostnameArray[0] + "." : "") +
-    SNSDomain +
-    ".sol";
-  const SNSPathAndSearch = solanaUrlParsed.pathname + solanaUrlParsed.search;
-  document.getElementById("display").textContent = SNSDomainFull;
+const handleSolRedirect = async ({ web3, urlParsed, hostnameArray, name }) => {
+  const urlFull =
+    (hostnameArray.length === 3 ? hostnameArray[0] + "." : "") + name + ".sol";
+  const SNSPathAndSearch = urlParsed.pathname + urlParsed.search;
+  // document.getElementById("display").textContent = nameFull;
   debugger;
   try {
-    let domainKey = await getDomainKey(web3, SNSDomain);
+    let domainKey = await getDomainKey(web3, name);
     let accountKey = domainKey;
     if (hostnameArray.length === 3) {
       // Check if there's a subdomain in the input and set accountKey if so
@@ -148,4 +141,55 @@ export const handleSolRedirect = async ({ web3, solanaUrl }) => {
   }
 };
 
-export const handleDegenRedirect = async ({ web3 } = {}) => {};
+export const handleRedirect = async ({ web3, redirectUrl }) => {
+  const urlParsed = new URL(redirectUrl);
+  const hostnameArray = urlParsed.hostname.split(".");
+  const domain = hostnameArray[hostnameArray.length - 1];
+  const name = hostnameArray[hostnameArray.length - 2];
+
+  switch (domain) {
+    case "sol":
+      handleSolRedirect({ web3, urlParsed, hostnameArray, name });
+      break;
+    case "degen":
+      handleDegenRedirect({ name, domain });
+      break;
+    default:
+      break;
+  }
+};
+
+export const handleDegenRedirect = async ({ name, domain }) => {
+  console.log("handleDegenRedirect", { name, domain });
+
+  // const { data } = await axios.get(
+  //   "https://preview-naming.warly.co/api/v1/get-registration-by-name",
+  //   {
+  //     params: {
+  //       name,
+  //       domain,
+  //     },
+  //   }
+  // );
+  const data = await fetch(
+    "https://preview-naming.warly.co/api/v1/get-registration-by-name",
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+      params: {
+        name,
+        domain,
+      },
+    }
+  );
+
+  console.log("data from wns", data);
+  if (data?.records?.http) {
+    window.location.href = data.records.http;
+  } else {
+    window.location.href = "./404.html";
+  }
+};

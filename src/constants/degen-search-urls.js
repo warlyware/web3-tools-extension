@@ -1,4 +1,4 @@
-export default [
+const degenSearchUrls = [
   "*://www.google.com/search?q=*.degen&*",
   "*://www.google.ad/search?q=*.degen&*",
   "*://www.google.ae/search?q=*.degen&*",
@@ -384,3 +384,5 @@ export default [
   "*://search.brave.com/search?q=*.degen&*",
   "*://search.brave.com/search?q=*.degen%2F*",
 ];
+
+export default degenSearchUrls;
