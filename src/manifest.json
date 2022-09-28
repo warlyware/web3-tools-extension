@@ -28,7 +28,7 @@
   ],
   "host_permissions": [
     "*://*.sol/*",
-    "*://naming.warly.co/",
+    "*://*.warly.co/",
     "*://search.brave.com/",
     "*://duckduckgo.com/",
     "*://duckduckgo.com/",

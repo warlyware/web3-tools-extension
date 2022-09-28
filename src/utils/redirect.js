@@ -1,25 +1,5 @@
-import * as CryptoJS from "./libraries/crypto-js.min.js";
-import { addHttps } from "./utils";
-
-/**
- * Create a popup notifying the user what domain they are on
- * TODO: option to disable
- *
- * @param solanaDomain the url
- */
-async function createDomainPopup(solanaDomain, redirectDomain, details, path) {
-  const NOTIFICATION_WIDTH = 200;
-  const NOTIFICATION_HEIGHT = 300;
-
-  const popup = await chrome.windows.create({
-    url: `notification.html?solanaDomain=${solanaDomain}&redirectDomain=${redirectDomain}&details=${details}&path=${path}`,
-    type: "popup",
-    top: Math.max(window.screenY, 0),
-    left: window.screenX + window.outerWidth - NOTIFICATION_WIDTH,
-    width: NOTIFICATION_WIDTH,
-    height: NOTIFICATION_HEIGHT,
-  });
-}
+import * as CryptoJS from "../libraries/crypto-js.min.js";
+import { addHttps } from "./";
 
 /**
  * Retreive the data stored in a given account
@@ -33,45 +13,6 @@ async function getContentFromAccount(web3, publicKey) {
   const nameAccount = await connection.getAccountInfo(publicKey, "processed");
   const data = nameAccount.data.toString("ascii").slice(96).replace(/\0/g, "");
   return data;
-}
-
-/**
- * Compute the key for the account pointing to the domain.
- * See https://github.com/Bonfida/solana-name-service-guide
- *
- * @param {string} name The .sol domain name
- * @returns {Promise<web3.PublicKey>} Public key of the domain's account in the sns
- */
-async function getDomainKey(web3, name) {
-  const SOL_TLD_AUTHORITY = new web3.PublicKey(
-    "58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx"
-  );
-  const hashedName = getHashedName(name);
-  const domainKey = await getNameAccountKey(
-    web3,
-    hashedName,
-    undefined,
-    SOL_TLD_AUTHORITY
-  );
-  return domainKey;
-}
-
-/**
- * Compute the key for the account pointing to a given subdomain.
- * See https://github.com/Bonfida/solana-name-service-guide
- *
- * @param {web3.PublicKey} parentDomainKey The parent .sol domain name
- * @param {string} subdomain The subdomain to compute the key for
- * @returns {Promise<web3.PublicKey>} Public key of the subdomain's account in the sns
- */
-async function getSubdomainKey(parentDomainKey, subdomain) {
-  const hashedName = getHashedName("\0".concat(subdomain));
-  const subdomainAccount = await getNameAccountKey(
-    hashedName,
-    undefined,
-    parentDomainKey
-  );
-  return subdomainAccount;
 }
 
 /**
@@ -126,21 +67,45 @@ async function getNameAccountKey(web3, hashed_name, nameClass, nameParent) {
 }
 
 /**
- * Redirects the solana url to the domain/ip/ipfs hash it points to.
+ * Compute the key for the account pointing to the domain.
+ * See https://github.com/Bonfida/solana-name-service-guide
  *
- * window.location.href has one param `solanaUrl`, which contains the hostname and path
- *  of the solana url that is passed in. Not required to contain other elements.
+ * @param {string} name The .sol domain name
+ * @returns {Promise<web3.PublicKey>} Public key of the domain's account in the sns
  */
-async function main() {
-  await import("./libraries/solana-web3.min.js");
-  await import("./libraries/crypto-js.min.js");
-  const web3 = window.solanaWeb3;
-  debugger;
-
-  const solanaUrl = addHttps(
-    new URL(window.location.href).searchParams.get("solanaUrl")
+async function getDomainKey(web3, name) {
+  const SOL_TLD_AUTHORITY = new web3.PublicKey(
+    "58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx"
   );
-  console.log("solanaUrl", solanaUrl);
+  const hashedName = getHashedName(name);
+  const domainKey = await getNameAccountKey(
+    web3,
+    hashedName,
+    undefined,
+    SOL_TLD_AUTHORITY
+  );
+  return domainKey;
+}
+
+/**
+ * Compute the key for the account pointing to a given subdomain.
+ * See https://github.com/Bonfida/solana-name-service-guide
+ *
+ * @param {web3.PublicKey} parentDomainKey The parent .sol domain name
+ * @param {string} subdomain The subdomain to compute the key for
+ * @returns {Promise<web3.PublicKey>} Public key of the subdomain's account in the sns
+ */
+async function getSubdomainKey(parentDomainKey, subdomain) {
+  const hashedName = getHashedName("\0".concat(subdomain));
+  const subdomainAccount = await getNameAccountKey(
+    hashedName,
+    undefined,
+    parentDomainKey
+  );
+  return subdomainAccount;
+}
+
+export const handleSolRedirect = async ({ web3, solanaUrl }) => {
   const solanaUrlParsed = new URL(solanaUrl);
   const hostnameArray = solanaUrlParsed.hostname.split(".");
   const SNSDomain = hostnameArray[hostnameArray.length - 2];
@@ -150,6 +115,7 @@ async function main() {
     ".sol";
   const SNSPathAndSearch = solanaUrlParsed.pathname + solanaUrlParsed.search;
   document.getElementById("display").textContent = SNSDomainFull;
+  debugger;
   try {
     let domainKey = await getDomainKey(web3, SNSDomain);
     let accountKey = domainKey;
@@ -180,6 +146,6 @@ async function main() {
     debugger;
     window.location.href = "./404.html";
   }
-}
+};
 
-main();
+export const handleDegenRedirect = async ({ web3 } = {}) => {};
