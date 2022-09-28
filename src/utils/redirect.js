@@ -1,4 +1,5 @@
 import { addHttps } from "./";
+import * as CryptoJS from "../libraries/crypto-js.min.js";
 
 /**
  * Retreive the data stored in a given account
@@ -171,8 +172,8 @@ export const handleDegenRedirect = async ({ name, domain }) => {
   //     },
   //   }
   // );
-  const data = await fetch(
-    "https://preview-naming.warly.co/api/v1/get-registration-by-name",
+  const res = await fetch(
+    `https://preview-naming.warly.co/api/v1/get-registration-by-name?name=${name}&domain=${domain}`,
     {
       method: "GET",
       headers: {
@@ -186,7 +187,15 @@ export const handleDegenRedirect = async ({ name, domain }) => {
     }
   );
 
+  const data = await res.json();
+
   console.log("data from wns", data);
+  console.log(
+    "parsed from wns",
+    data.name,
+    data.domain.name,
+    data.records.http
+  );
   if (data?.records?.http) {
     window.location.href = data.records.http;
   } else {
