@@ -2,6 +2,8 @@ import "crx-hotreload";
 import solSearchUrls from "./constants/sol-search-urls";
 import degenSearchUrls from "./constants/degen-search-urls";
 
+self.oninstall = () => self.skipWaiting();
+
 const getCurrentTab = async () => {
   const [tab] = await chrome.tabs.query({
     active: true,
