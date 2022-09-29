@@ -1,6 +1,7 @@
 import "crx-hotreload";
 import solSearchUrls from "./constants/sol-search-urls";
 import degenSearchUrls from "./constants/degen-search-urls";
+import portalsSearchUrls from "./constants/portals-search-urls";
 
 self.oninstall = () => self.skipWaiting();
 
@@ -67,17 +68,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     await handleRedirect(details.url);
   },
   {
-    urls: ["*://*.sol/*"],
-  },
-  []
-);
-// Listen for .degen requests
-chrome.webRequest.onBeforeRequest.addListener(
-  async (details) => {
-    await redirectDegenUrl(details.url);
-  },
-  {
-    urls: ["*://*.degen/*"],
+    urls: ["*://*.sol/*", "*://*.degen/*", "*://*.portals/*"],
   },
   []
 );
@@ -88,10 +79,9 @@ chrome.webRequest.onBeforeRequest.addListener(
     console.log("onBeforeRequest", details);
     const url = new URL(details.url).searchParams.get("q");
     await handleRedirect(url);
-    debugger;
   },
   {
-    urls: [...solSearchUrls, ...degenSearchUrls],
+    urls: [...solSearchUrls, ...degenSearchUrls, ...portalsSearchUrls],
   },
   []
 );

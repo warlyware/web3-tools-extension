@@ -142,36 +142,8 @@ const handleSolRedirect = async ({ web3, urlParsed, hostnameArray, name }) => {
   }
 };
 
-export const handleRedirect = async ({ web3, redirectUrl }) => {
-  const urlParsed = new URL(redirectUrl);
-  const hostnameArray = urlParsed.hostname.split(".");
-  const domain = hostnameArray[hostnameArray.length - 1];
-  const name = hostnameArray[hostnameArray.length - 2];
-
-  switch (domain) {
-    case "sol":
-      handleSolRedirect({ web3, urlParsed, hostnameArray, name });
-      break;
-    case "degen":
-      handleDegenRedirect({ name, domain });
-      break;
-    default:
-      break;
-  }
-};
-
-export const handleDegenRedirect = async ({ name, domain }) => {
-  console.log("handleDegenRedirect", { name, domain });
-
-  // const { data } = await axios.get(
-  //   "https://preview-naming.warly.co/api/v1/get-registration-by-name",
-  //   {
-  //     params: {
-  //       name,
-  //       domain,
-  //     },
-  //   }
-  // );
+const handleWnsRedirect = async ({ name, domain }) => {
+  console.log("handleWnsRedirect", { name, domain });
   const res = await fetch(
     `https://preview-naming.warly.co/api/v1/get-registration-by-name?name=${name}&domain=${domain}`,
     {
@@ -200,5 +172,61 @@ export const handleDegenRedirect = async ({ name, domain }) => {
     window.location.href = data.records.http;
   } else {
     window.location.href = "./404.html";
+  }
+};
+
+const handlePortalsRedirect = async ({ name, domain }) => {
+  console.log("handlePortalsRedirect", { name, domain });
+  const res = await fetch(
+    `https://preview-naming.warly.co/api/v1/get-registration-by-name?name=${name}&domain=${domain}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+      params: {
+        name,
+        domain,
+      },
+    }
+  );
+
+  const data = await res.json();
+
+  console.log("data from wns", data);
+  console.log(
+    "parsed from wns",
+    data.name,
+    data.domain.name,
+    data.records,
+    data.records.portalsRoomId,
+    data.records.nftAddress
+  );
+  if (data?.records?.portalsRoomId) {
+    window.location.href = `https://theportal.to/?room=${data.records.portalsRoomId}`;
+  } else {
+    window.location.href = "./404.html";
+  }
+};
+
+export const handleRedirect = async ({ web3, redirectUrl }) => {
+  const urlParsed = new URL(redirectUrl);
+  const hostnameArray = urlParsed.hostname.split(".");
+  const domain = hostnameArray[hostnameArray.length - 1];
+  const name = hostnameArray[hostnameArray.length - 2];
+
+  switch (domain) {
+    case "sol":
+      handleSolRedirect({ web3, urlParsed, hostnameArray, name });
+      break;
+    case "degen":
+      handleWnsRedirect({ name, domain });
+      break;
+    case "portals":
+      handlePortalsRedirect({ name, domain });
+      break;
+    default:
+      break;
   }
 };
