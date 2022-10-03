@@ -2,7 +2,6 @@ const appendButton = () => {
   const mintAddress = window.location.pathname.split("/")[2];
 
   var newElement = document.createElement("img");
-  newElement.style.zIndex = 9999;
   newElement.style.float = "right";
   newElement.style.display = "inline";
   newElement.style.padding = "2px";
