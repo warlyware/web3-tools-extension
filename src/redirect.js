@@ -8,8 +8,6 @@ import { handleRedirect } from "./utils/redirect";
  *  of the solana url that is passed in. Not required to contain other elements.
  */
 async function main() {
-  // await import("./libraries/solana-web3.min.js");
-  // await import("./libraries/crypto-js.min.js");
   const web3 = window.solanaWeb3;
   console.log(web3);
 

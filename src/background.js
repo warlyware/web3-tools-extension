@@ -3,6 +3,8 @@ import nftSearchUrls from "./constants/nft-search-urls";
 import solSearchUrls from "./constants/sol-search-urls";
 import degenSearchUrls from "./constants/degen-search-urls";
 import portalsSearchUrls from "./constants/portals-search-urls";
+import verseSearchUrls from "./constants/verse-search-urls";
+import metaverseSearchUrls from "./constants/metaverse-search-urls";
 
 self.oninstall = () => self.skipWaiting();
 
@@ -31,7 +33,6 @@ async function keepAlive() {
       await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         function: () => chrome.runtime.connect({ name: "keepAlive" }),
-        // `function` will become `func` in Chrome 93+
       });
       chrome.tabs.onUpdated.removeListener(retryOnTabUpdate);
       return;
@@ -56,7 +57,6 @@ const getCurrentTab = async () => {
 
 const handleRedirect = async (url) => {
   const tab = await getCurrentTab();
-  console.log("i am nft search");
   if (tab !== undefined && url !== undefined) {
     chrome.tabs.update(tab.id, {
       url: `redirect.html?redirectUrl=${url}`,
@@ -69,12 +69,17 @@ chrome.webRequest.onBeforeRequest.addListener(
     await handleRedirect(details.url);
   },
   {
-    urls: ["*://*.sol/*", "*://*.degen/*", "*://*.portals/*"],
+    urls: [
+      "*://*.sol/*",
+      "*://*.degen/*",
+      "*://*.portals/*",
+      "*://*.metaverse/*",
+      "*://*.verse/*",
+    ],
   },
   []
 );
 
-// Intercept browser created search engine requests for .sol
 chrome.webRequest.onBeforeRequest.addListener(
   async (details) => {
     console.log("onBeforeRequest", details);
@@ -86,21 +91,25 @@ chrome.webRequest.onBeforeRequest.addListener(
       ...solSearchUrls,
       ...degenSearchUrls,
       ...portalsSearchUrls,
+      ...verseSearchUrls,
+      ...metaverseSearchUrls,
       ...nftSearchUrls,
     ],
   },
   []
 );
-// Intercept browser created search engine requests for .degen
-// chrome.webRequest.onBeforeRequest.addListener(
-//   async (details) => {
-//     console.log("degen", details);
-//     const url = new URL(details.url).searchParams.get("q");
-//     await redirectDegenUrl(url);
-//     debugger;
-//   },
-//   {
-//     urls: degenSearchUrls,
-//   },
-//   []
-// );
+
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (
+    changeInfo.status === "complete" &&
+    tab.url.includes("https://magiceden.io/item-details/")
+  ) {
+    chrome.scripting.executeScript(
+      {
+        target: { tabId: tab.id },
+        files: ["inject.js"],
+      },
+      () => {}
+    );
+  }
+});

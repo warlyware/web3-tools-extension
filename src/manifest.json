@@ -1,6 +1,6 @@
 {
   "name": "Web3 Tools",
-  "version": "1.0.0",
+  "version": "0.0.3",
   "description": "A web 3 tookit for the browser",
   "manifest_version": 3,
   "background": {

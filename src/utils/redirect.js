@@ -138,28 +138,35 @@ const handleSolRedirect = async ({ web3, urlParsed, hostnameArray, name }) => {
   } catch (err) {
     console.log(err);
     debugger;
-    window.location.href = "./404.html";
+    window.location.href = `./404.html?redirectUrl=${url}`;
   }
 };
 
 const handleWnsRedirect = async ({ name, domain }) => {
-  console.log("handleWnsRedirect", { name, domain });
-  const res = await fetch(
-    `https://preview-naming.warly.co/api/v1/get-registration-by-name?name=${name}&domain=${domain}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-      },
-      params: {
-        name,
-        domain,
-      },
-    }
-  );
+  // TODO: Handle no web record
+  let data;
 
-  const data = await res.json();
+  try {
+    const res = await fetch(
+      `https://preview-naming.warly.co/api/v1/get-registration-by-name?name=${name}&domain=${domain}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        params: {
+          name,
+          domain,
+        },
+      }
+    );
+    data = await res.json();
+  } catch (error) {
+    console.error(error);
+    window.location.href = `./404.html?name=${name}&domain=${domain}`;
+    return;
+  }
 
   console.log("data from wns", data);
   console.log(
@@ -219,6 +226,7 @@ export const handleRedirect = async ({ web3, redirectUrl }) => {
   if (urlParsed?.host === "nft") {
     const mintAddress = urlParsed.pathname.replaceAll("/", "");
     window.location.href = `https://warly.co/nft/${mintAddress}`;
+    return;
   }
 
   console.log({
@@ -232,13 +240,15 @@ export const handleRedirect = async ({ web3, redirectUrl }) => {
     case "sol":
       handleSolRedirect({ web3, urlParsed, hostnameArray, name });
       break;
-    case "degen":
-      handleWnsRedirect({ name, domain });
-      break;
     case "portals":
       handlePortalsRedirect({ name, domain });
+    case "degen":
+    case "verse":
+    case "metaverse":
+      handleWnsRedirect({ name, domain });
       break;
     default:
+      window.location.href = "./404.html";
       break;
   }
 };

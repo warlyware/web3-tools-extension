@@ -1,38 +1,26 @@
-<div id="main">
-  <div class="fof">
-    <text>snsr error</text>
-    <h1>404</h1>
-    <text>page not found</text>
-  </div>
-</div>
-<style>
-  html {
-    height: 100%;
-  }
-
-  body {
-    font-family: "Lato", sans-serif;
-    color: #888;
-    margin: 0;
-    background-color: #111;
-  }
-
-  #main {
-    display: table;
-    width: 100%;
-    height: 100vh;
-    text-align: center;
-  }
-
-  .fof {
-    display: table-cell;
-    vertical-align: middle;
-  }
-
-  .fof h1 {
-    font-size: 50px;
-    display: inline-block;
-    padding-right: 12px;
-    padding-left: 12px;
-  }
-</style>
+<html>
+  <head>
+    <title>WNS</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body
+    class="bg-slate-800 text-slate-300 text-2xl flex w-screen h-screen items-center justify-center"
+  >
+    <div class="flex flex-col items-center justify-center text-center max-w-lg">
+      <img
+        src="images/warlyco-logo-white-on-transparent.svg"
+        alt="logo"
+        class="w-10 rounded-xl mb-8"
+      />
+      <text class="text-sm mb-6">No registration found.</text>
+      <div class="text-6xl py-4 mb-4">
+        <text id="registration"></text>
+      </div>
+      <div class="flex text-xl mb-2">is available!</div>
+      <div class="flex text-xl underline">
+        <text id="link-anchor" />
+      </div>
+    </div>
+  </body>
+  <script src="404.js" defer type="module"></script>
+</html>
