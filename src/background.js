@@ -1,4 +1,5 @@
 import "crx-hotreload";
+import nftSearchUrls from "./constants/nft-search-urls";
 import solSearchUrls from "./constants/sol-search-urls";
 import degenSearchUrls from "./constants/degen-search-urls";
 import portalsSearchUrls from "./constants/portals-search-urls";
@@ -55,6 +56,7 @@ const getCurrentTab = async () => {
 
 const handleRedirect = async (url) => {
   const tab = await getCurrentTab();
+  console.log("i am nft search");
   if (tab !== undefined && url !== undefined) {
     chrome.tabs.update(tab.id, {
       url: `redirect.html?redirectUrl=${url}`,
@@ -62,7 +64,6 @@ const handleRedirect = async (url) => {
   }
 };
 
-// Listen for .sol requests
 chrome.webRequest.onBeforeRequest.addListener(
   async (details) => {
     await handleRedirect(details.url);
@@ -81,7 +82,12 @@ chrome.webRequest.onBeforeRequest.addListener(
     await handleRedirect(url);
   },
   {
-    urls: [...solSearchUrls, ...degenSearchUrls, ...portalsSearchUrls],
+    urls: [
+      ...solSearchUrls,
+      ...degenSearchUrls,
+      ...portalsSearchUrls,
+      ...nftSearchUrls,
+    ],
   },
   []
 );

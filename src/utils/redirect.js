@@ -216,6 +216,18 @@ export const handleRedirect = async ({ web3, redirectUrl }) => {
   const domain = hostnameArray[hostnameArray.length - 1];
   const name = hostnameArray[hostnameArray.length - 2];
 
+  if (urlParsed?.host === "nft") {
+    const mintAddress = urlParsed.pathname.replaceAll("/", "");
+    window.location.href = `https://warly.co/nft/${mintAddress}`;
+  }
+
+  console.log({
+    urlParsed,
+    hostnameArray,
+    domain,
+    name,
+  });
+
   switch (domain) {
     case "sol":
       handleSolRedirect({ web3, urlParsed, hostnameArray, name });
