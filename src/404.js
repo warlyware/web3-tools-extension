@@ -14,16 +14,9 @@ const main = () => {
     ? "The owner of this domain has not yet configured a web record."
     : "No registration found.";
   secondaryMessageEl.textContent = isRegistered ? "" : "is available!";
-  // if (isRegistered) {
-  // } else {
-  //   primaryMessageEl.textContent = `No registration found.`;
-  //   secondaryMessageEl.textContent = "is available!";
-  // }
 
   if (isRegistered) return;
 
-  // console.log({ name, domain });
-  // console.log("poopytrim");
   registrationEl.textContent = `${name}.${domain}`;
 
   var a = document.createElement("a");
