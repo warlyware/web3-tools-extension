@@ -9,11 +9,11 @@ import { handleRedirect } from "./utils/redirect";
  */
 async function main() {
   const web3 = window.solanaWeb3;
-  console.log(web3);
 
   const redirectUrl = addHttps(
     new URL(window.location.href).searchParams.get("redirectUrl")
   );
+  console.log("handleRedirect", { redirectUrl });
   if (redirectUrl) {
     handleRedirect({
       web3: solanaWeb3,

@@ -145,7 +145,7 @@ const handleSolRedirect = async ({ web3, urlParsed, hostnameArray, name }) => {
 const handleWnsRedirect = async ({ name, domain }) => {
   // TODO: Handle no web record
   let data;
-
+  console.log("handleWnsRedirect", name, domain);
   try {
     const res = await fetch(
       `https://preview-naming.warly.co/api/v1/get-registration-by-name?name=${name}&domain=${domain}`,
@@ -168,17 +168,20 @@ const handleWnsRedirect = async ({ name, domain }) => {
     return;
   }
 
-  console.log("data from wns", data);
-  console.log(
-    "parsed from wns",
-    data.name,
-    data.domain.name,
-    data.records.http
-  );
+  if (!data?.id) {
+    console.log(1);
+    window.location.href = `./404.html?name=${name}&domain=${domain}`;
+    return;
+  }
+
   if (data?.records?.http) {
     window.location.href = data.records.http;
-  } else {
-    window.location.href = "./404.html";
+    return;
+  }
+
+  if (data?.id && !data?.records?.http) {
+    console.log(2);
+    window.location.href = `./404.html?name=${name}&domain=${domain}&registered=true`;
   }
 };
 
@@ -223,18 +226,18 @@ export const handleRedirect = async ({ web3, redirectUrl }) => {
   const domain = hostnameArray[hostnameArray.length - 1];
   const name = hostnameArray[hostnameArray.length - 2];
 
-  if (urlParsed?.host === "nft") {
-    const mintAddress = urlParsed.pathname.replaceAll("/", "");
-    window.location.href = `https://warly.co/nft/${mintAddress}`;
-    return;
-  }
-
-  console.log({
+  console.log("parsedUrl", {
     urlParsed,
     hostnameArray,
     domain,
     name,
   });
+
+  if (urlParsed?.host === "nft") {
+    const mintAddress = urlParsed.pathname.replaceAll("/", "");
+    window.location.href = `https://warly.co/nft/${mintAddress}`;
+    return;
+  }
 
   switch (domain) {
     case "sol":
@@ -242,6 +245,7 @@ export const handleRedirect = async ({ web3, redirectUrl }) => {
       break;
     case "portals":
       handlePortalsRedirect({ name, domain });
+      break;
     case "degen":
     case "verse":
     case "metaverse":

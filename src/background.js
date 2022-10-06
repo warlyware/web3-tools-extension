@@ -102,7 +102,7 @@ chrome.webRequest.onBeforeRequest.addListener(
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (
     changeInfo.status === "complete" &&
-    tab.url.includes("https://magiceden.io/item-details/")
+    tab?.url?.includes("https://magiceden.io/item-details/")
   ) {
     chrome.scripting.executeScript(
       {
