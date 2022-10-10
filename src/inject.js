@@ -1,4 +1,4 @@
-const appendButton = () => {
+const createButton = () => {
   const mintAddress = window.location.pathname.split("/")[2];
 
   var newElement = document.createElement("img");
@@ -10,6 +10,7 @@ const appendButton = () => {
   newElement.style.width = "30px";
   newElement.style.borderRadius = "50%";
   newElement.style.cursor = "pointer";
+  newElement.style.alt = "warlyco";
   newElement.onclick = () => {
     window.open(`https://warly.co/nft/${mintAddress}`, "_blank");
   };
@@ -18,20 +19,61 @@ const appendButton = () => {
     "https://warly.co/images/warlyco-logo-white-on-transparent.svg";
   newElement.alt = "Check NFT info on warly.co";
   newElement.title = "Check NFT info on warly.co";
+  return newElement;
+};
+
+const appendButtonToNftPage = (buttonEl) => {
+  if (!window.location.href.includes("https://magiceden.io/item-details/"))
+    return;
 
   let el;
   let counter = 0;
   const interval = setInterval(() => {
+    console.log("trying");
     el = document.querySelector(".me-dropdown-container.social-share");
 
     if (el) {
-      el.closest("div.align-items-center").appendChild(newElement);
+      el.closest("div.align-items-center").appendChild(buttonEl);
     }
     counter++;
     if (counter === 10 || el) {
       clearInterval(interval);
     }
-  }, 500);
+  }, 1000);
 };
 
-appendButton();
+const appendButtonToCollectionPage = (buttonEl) => {};
+
+const addMessageListener = (buttonEl) => {
+  chrome.runtime.onMessage.addListener(function (
+    request,
+    sender,
+    sendResponse
+  ) {
+    console.log(
+      sender.tab
+        ? "from a content script:" + sender.tab.url
+        : "from the extension"
+    );
+    if (request.action === "PIN_BUTTON") {
+      appendButtonToNftPage(buttonEl);
+    }
+  });
+};
+
+const main = () => {
+  console.log("injection");
+  const buttonEl = createButton();
+  appendButtonToNftPage(buttonEl);
+  addMessageListener(buttonEl);
+};
+
+main();
+
+// chrome.extension.onMessage.addListener(function (
+//   request,
+//   sender,
+//   sendResponse
+// ) {
+//   console.log("message received");
+// });

@@ -99,11 +99,21 @@ chrome.webRequest.onBeforeRequest.addListener(
   []
 );
 
+const sendMessageToAppendButton = async (tabId) => {
+  chrome.tabs.sendMessage(tabId, { action: "PIN_BUTTON" }, function (response) {
+    console.log(response.farewell);
+  });
+};
+
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (
-    changeInfo.status === "complete" &&
-    tab?.url?.includes("https://magiceden.io/item-details/")
+    (changeInfo.status === "complete" &&
+      tab?.url?.includes("https://magiceden.io/item-details/")) ||
+    (changeInfo.status === "complete" &&
+      tab?.url?.includes("https://magiceden.io/marketplace/"))
   ) {
+    sendMessageToAppendButton(tabId);
+    console.log("should be added");
     chrome.scripting.executeScript(
       {
         target: { tabId: tab.id },

@@ -23,6 +23,7 @@
     "128": "images/logo.png"
   },
   "permissions": [
+    "activeTab",
     "webRequest",
     "storage",
     "scripting"
