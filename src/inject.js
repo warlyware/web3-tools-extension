@@ -42,8 +42,6 @@ const appendButtonToNftPage = (buttonEl) => {
   }, 1000);
 };
 
-const appendButtonToCollectionPage = (buttonEl) => {};
-
 const addMessageListener = (buttonEl) => {
   chrome.runtime.onMessage.addListener(function (
     request,
@@ -69,11 +67,3 @@ const main = () => {
 };
 
 main();
-
-// chrome.extension.onMessage.addListener(function (
-//   request,
-//   sender,
-//   sendResponse
-// ) {
-//   console.log("message received");
-// });
