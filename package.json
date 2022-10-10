@@ -23,7 +23,7 @@
   "scripts": {
     "prebuild": "rm -rf dist .cache .parcel-cache",
     "build:tailwind": "tailwindcss build src/style.css -c ./tailwind.config.js -o dist/style.css",
-    "dev": "yarn build:tailwind && cp 'src/manifest.json' 'dist/' && parcel watch --no-hmr src/{*.js,popup.html,404.html,popup.html,redirect.html,libraries/*.min.js,utils/*.js,constants/*.js,images/*.*}",
-    "build": "yarn build:tailwind && cp 'src/manifest.json' 'dist/' && parcel build src/{*.js,popup.html,404.html,popup.html,redirect.html,libraries/*.min.js,utils/*.js,constants/*.js,images/*.*}"
+    "dev": "yarn build:tailwind && cp 'src/manifest.json' 'dist/' && parcel watch --no-hmr src/{*.js,popup.html,404.html,popup.html,redirect.html,libraries/*.min.js,utils/*.js,constants/*.js,images/*.png,images/*.svg}",
+    "build": "yarn build:tailwind && cp 'src/manifest.json' 'dist/' && parcel build src/{*.js,popup.html,404.html,popup.html,redirect.html,libraries/*.min.js,utils/*.js,constants/*.js,images/*.png,images/*.svg}"
   }
 }

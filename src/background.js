@@ -82,7 +82,6 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 chrome.webRequest.onBeforeRequest.addListener(
   async (details) => {
-    console.log("onBeforeRequest", details);
     const url = new URL(details.url).searchParams.get("q");
     await handleRedirect(url);
   },
@@ -100,20 +99,15 @@ chrome.webRequest.onBeforeRequest.addListener(
 );
 
 const sendMessageToAppendButton = async (tabId) => {
-  chrome.tabs.sendMessage(tabId, { action: "PIN_BUTTON" }, function (response) {
-    console.log(response.farewell);
-  });
+  chrome.tabs.sendMessage(tabId, { action: "PIN_BUTTON" }, () => {});
 };
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   if (
-    (changeInfo.status === "complete" &&
-      tab?.url?.includes("https://magiceden.io/item-details/")) ||
-    (changeInfo.status === "complete" &&
-      tab?.url?.includes("https://magiceden.io/marketplace/"))
+    changeInfo.status === "complete" &&
+    tab?.url?.includes("https://magiceden.io/item-details/")
   ) {
     sendMessageToAppendButton(tabId);
-    console.log("should be added");
     chrome.scripting.executeScript(
       {
         target: { tabId: tab.id },

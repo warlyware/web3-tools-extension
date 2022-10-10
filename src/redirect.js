@@ -7,10 +7,10 @@ async function main() {
   const redirectUrl = addHttps(
     new URL(window.location.href).searchParams.get("redirectUrl")
   );
-  console.log("handleRedirect", { redirectUrl });
+
   if (redirectUrl) {
     handleRedirect({
-      web3: solanaWeb3,
+      web3,
       redirectUrl,
     });
     return;

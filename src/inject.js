@@ -29,7 +29,6 @@ const appendButtonToNftPage = (buttonEl) => {
   let el;
   let counter = 0;
   const interval = setInterval(() => {
-    console.log("trying");
     el = document.querySelector(".me-dropdown-container.social-share");
 
     if (el) {
@@ -43,16 +42,7 @@ const appendButtonToNftPage = (buttonEl) => {
 };
 
 const addMessageListener = (buttonEl) => {
-  chrome.runtime.onMessage.addListener(function (
-    request,
-    sender,
-    sendResponse
-  ) {
-    console.log(
-      sender.tab
-        ? "from a content script:" + sender.tab.url
-        : "from the extension"
-    );
+  chrome.runtime.onMessage.addListener(function (request) {
     if (request.action === "PIN_BUTTON") {
       appendButtonToNftPage(buttonEl);
     }
@@ -60,7 +50,6 @@ const addMessageListener = (buttonEl) => {
 };
 
 const main = () => {
-  console.log("injection");
   const buttonEl = createButton();
   appendButtonToNftPage(buttonEl);
   addMessageListener(buttonEl);
