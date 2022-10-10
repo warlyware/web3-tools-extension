@@ -1,10 +1,6 @@
 import "crx-hotreload";
 import nftSearchUrls from "./constants/nft-search-urls";
-import solSearchUrls from "./constants/sol-search-urls";
-import degenSearchUrls from "./constants/degen-search-urls";
-import portalsSearchUrls from "./constants/portals-search-urls";
-import verseSearchUrls from "./constants/verse-search-urls";
-import metaverseSearchUrls from "./constants/metaverse-search-urls";
+import getSearchUrls from "./utils/get-search-urls";
 
 self.oninstall = () => self.skipWaiting();
 
@@ -87,11 +83,11 @@ chrome.webRequest.onBeforeRequest.addListener(
   },
   {
     urls: [
-      ...solSearchUrls,
-      ...degenSearchUrls,
-      ...portalsSearchUrls,
-      ...verseSearchUrls,
-      ...metaverseSearchUrls,
+      ...getSearchUrls("sol"),
+      ...getSearchUrls("degen"),
+      ...getSearchUrls("portals"),
+      ...getSearchUrls("verse"),
+      ...getSearchUrls("metaverse"),
       ...nftSearchUrls,
     ],
   },

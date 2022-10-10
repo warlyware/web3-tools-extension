@@ -1,4 +1,4 @@
-// nft%3A%2F
+// nft%3A%2F == nft://
 const nftSearchUrls = [
   "*://www.google.com/search?q=nft%3A%2F",
   "*://www.google.ad/search?q=nft%3A%2F",
