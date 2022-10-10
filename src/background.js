@@ -65,13 +65,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     await handleRedirect(details.url);
   },
   {
-    urls: [
-      "*://*.sol/*",
-      "*://*.degen/*",
-      "*://*.portals/*",
-      "*://*.metaverse/*",
-      "*://*.verse/*",
-    ],
+    urls: ["*://*.sol/*", "*://*.degen/*", "*://*.portals/*"],
   },
   []
 );
@@ -86,8 +80,6 @@ chrome.webRequest.onBeforeRequest.addListener(
       ...getSearchUrls("sol"),
       ...getSearchUrls("degen"),
       ...getSearchUrls("portals"),
-      ...getSearchUrls("verse"),
-      ...getSearchUrls("metaverse"),
       ...nftSearchUrls,
     ],
   },

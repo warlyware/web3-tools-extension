@@ -188,8 +188,6 @@ export const handleRedirect = async ({ web3, redirectUrl }) => {
       handlePortalsRedirect({ name, domain });
       break;
     case "degen":
-    case "verse":
-    case "metaverse":
       handleWnsRedirect({ name, domain });
       break;
     default:
