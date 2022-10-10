@@ -1,6 +1,6 @@
 {
   "name": "web3-tools-extension",
-  "version": "1.0.0",
+  "version": "0.0.5",
   "description": "A web 3 tookit for the browser",
   "license": "MIT",
   "devDependencies": {

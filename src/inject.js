@@ -35,10 +35,10 @@ const appendButtonToNftPage = (buttonEl) => {
       el.closest("div.align-items-center").appendChild(buttonEl);
     }
     counter++;
-    if (counter === 10 || el) {
+    if (counter === 20 || el) {
       clearInterval(interval);
     }
-  }, 1000);
+  }, 500);
 };
 
 const addMessageListener = (buttonEl) => {
@@ -50,6 +50,9 @@ const addMessageListener = (buttonEl) => {
 };
 
 const main = () => {
+  const existingButton = document.querySelector('[alt="warlyco"]');
+  if (existingButton) return;
+
   const buttonEl = createButton();
   appendButtonToNftPage(buttonEl);
   addMessageListener(buttonEl);
