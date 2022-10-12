@@ -1,5 +1,6 @@
 const createButton = () => {
   const mintAddress = window.location.pathname.split("/")[2];
+  alert(mintAddress);
 
   var newElement = document.createElement("img");
   newElement.style.float = "right";
@@ -41,21 +42,27 @@ const appendButtonToNftPage = (buttonEl) => {
   }, 500);
 };
 
-const addMessageListener = (buttonEl) => {
+const handleAppendButton = () => {
+  const existingButton = document.querySelector('[alt="warlyco"]');
+  if (existingButton) {
+    existingButton.remove();
+  }
+
+  const buttonEl = createButton();
+  appendButtonToNftPage(buttonEl);
+};
+
+const addMessageListener = () => {
   chrome.runtime.onMessage.addListener(function (request) {
     if (request.action === "PIN_BUTTON") {
-      appendButtonToNftPage(buttonEl);
+      handleAppendButton();
     }
   });
 };
 
 const main = () => {
-  const existingButton = document.querySelector('[alt="warlyco"]');
-  if (existingButton) return;
-
-  const buttonEl = createButton();
-  appendButtonToNftPage(buttonEl);
-  addMessageListener(buttonEl);
+  addMessageListener();
+  handleAppendButton();
 };
 
 main();
