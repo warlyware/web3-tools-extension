@@ -188,7 +188,7 @@ export const handleRedirect = async ({ web3, redirectUrl }) => {
       handlePortalsRedirect({ name, domain });
       break;
     case "degen":
-      handleWnsRedirect({ name, domain });
+      // handleWnsRedirect({ name, domain });
       break;
     default:
       window.location.href = "./404.html";
