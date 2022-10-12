@@ -169,10 +169,13 @@ const handlePortalsRedirect = async ({ name, domain }) => {
 };
 
 export const handleRedirect = async ({ web3, redirectUrl }) => {
+  const registrationEl = document.getElementById("registration");
   const urlParsed = new URL(redirectUrl);
   const hostnameArray = urlParsed.hostname.split(".");
   const domain = hostnameArray[hostnameArray.length - 1];
   const name = hostnameArray[hostnameArray.length - 2];
+
+  registrationEl.textContent = `${name}.${domain}`;
 
   if (urlParsed?.host === "nft") {
     const mintAddress = urlParsed.pathname.replaceAll("/", "");
@@ -188,7 +191,7 @@ export const handleRedirect = async ({ web3, redirectUrl }) => {
       handlePortalsRedirect({ name, domain });
       break;
     case "degen":
-      // handleWnsRedirect({ name, domain });
+      handleWnsRedirect({ name, domain });
       break;
     default:
       window.location.href = "./404.html";

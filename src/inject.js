@@ -1,6 +1,5 @@
 const createButton = () => {
   const mintAddress = window.location.pathname.split("/")[2];
-  alert(mintAddress);
 
   var newElement = document.createElement("img");
   newElement.style.float = "right";
