@@ -169,13 +169,20 @@ const handlePortalsRedirect = async ({ name, domain }) => {
 };
 
 export const handleRedirect = async ({ web3, redirectUrl }) => {
-  const registrationEl = document.getElementById("registration");
   const urlParsed = new URL(redirectUrl);
   const hostnameArray = urlParsed.hostname.split(".");
   const domain = hostnameArray[hostnameArray.length - 1];
   const name = hostnameArray[hostnameArray.length - 2];
 
-  registrationEl.textContent = `${name}.${domain}`;
+  const redirectionEl = document.getElementById("redirection");
+  const registrationEl = document.getElementById("registration");
+
+  if (registrationEl && name && domain) {
+    redirectionEl.textContent = "Redirecting to";
+    registrationEl.textContent = `${name}.${domain}`;
+  } else {
+    redirectionEl.textContent = "Redirecting";
+  }
 
   if (urlParsed?.host === "nft") {
     const mintAddress = urlParsed.pathname.replaceAll("/", "");
