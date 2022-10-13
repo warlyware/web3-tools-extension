@@ -25,7 +25,6 @@
   "permissions": [
     "activeTab",
     "webRequest",
-    "storage",
     "scripting"
   ],
   "host_permissions": [

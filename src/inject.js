@@ -1,3 +1,4 @@
+const imageAltText = "Check NFT info on warly.co";
 const createButton = () => {
   const mintAddress = window.location.pathname.split("/")[2];
 
@@ -10,15 +11,15 @@ const createButton = () => {
   newElement.style.width = "30px";
   newElement.style.borderRadius = "50%";
   newElement.style.cursor = "pointer";
-  newElement.style.alt = "warlyco";
   newElement.onclick = () => {
     window.open(`https://warly.co/nft/${mintAddress}`, "_blank");
   };
 
+  newElement.id = "warlyco-button";
   newElement.src =
     "https://warly.co/images/warlyco-logo-white-on-transparent.svg";
-  newElement.alt = "Check NFT info on warly.co";
-  newElement.title = "Check NFT info on warly.co";
+  newElement.alt = imageAltText;
+  newElement.title = imageAltText;
   return newElement;
 };
 
@@ -42,7 +43,7 @@ const appendButtonToNftPage = (buttonEl) => {
 };
 
 const handleAppendButton = () => {
-  const existingButton = document.querySelector('[alt="warlyco"]');
+  const existingButton = document.getElementById("warlyco-button");
   if (existingButton) {
     existingButton.remove();
   }
