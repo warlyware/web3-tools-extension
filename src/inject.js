@@ -27,27 +27,26 @@ const appendButtonToNftPage = (buttonEl) => {
   if (!window.location.href.includes("https://magiceden.io/item-details/"))
     return;
 
-  let el;
+  let hookEl;
   let counter = 0;
   const interval = setInterval(() => {
-    el = document.querySelector(".me-dropdown-container.social-share");
+    hookEl = document.querySelector(".me-dropdown-container.social-share");
+    const existingButton = document.getElementById("warlyco-button");
+    if (existingButton) {
+      hookEl.removeChild(existingButton);
+    }
 
-    if (el) {
-      el.closest("div.align-items-center").appendChild(buttonEl);
+    if (hookEl) {
+      hookEl.closest("div.align-items-center").appendChild(buttonEl);
     }
     counter++;
-    if (counter === 20 || el) {
+    if (counter === 20 || hookEl) {
       clearInterval(interval);
     }
   }, 500);
 };
 
 const handleAppendButton = () => {
-  const existingButton = document.getElementById("warlyco-button");
-  if (existingButton) {
-    existingButton.remove();
-  }
-
   const buttonEl = createButton();
   appendButtonToNftPage(buttonEl);
 };
