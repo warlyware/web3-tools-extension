@@ -1,7 +1,5 @@
 const imageAltText = "Check NFT info on warly.co";
 const createButton = () => {
-  const mintAddress = window.location.pathname.split("/")[2];
-
   var newElement = document.createElement("img");
   newElement.style.float = "right";
   newElement.style.display = "inline";
@@ -12,7 +10,10 @@ const createButton = () => {
   newElement.style.borderRadius = "50%";
   newElement.style.cursor = "pointer";
   newElement.onclick = () => {
-    window.open(`https://warly.co/nft/${mintAddress}`, "_blank");
+    window.open(
+      `https://warly.co/nft/${window.location.pathname.split("/")[2]}`,
+      "_blank"
+    );
   };
 
   newElement.id = "warlyco-button";
@@ -43,7 +44,7 @@ const appendButtonToNftPage = (buttonEl) => {
     if (counter === 20 || hookEl) {
       clearInterval(interval);
     }
-  }, 500);
+  }, 1000);
 };
 
 const handleAppendButton = () => {
